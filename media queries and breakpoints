@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+void main() {
+  runApp(const MaterialApp(
+    home: ResponsiveDemo(),
+  ));
+}
+class ResponsiveDemo extends StatelessWidget {
+  const ResponsiveDemo({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Responsive UI with LayoutBuilder"),
+      ),
+      body: Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Read available width from parent constraints
+            double maxWidth = constraints.maxWidth;
+            // Define design configurations based on breakpoints
+            double containerWidth;
+            Color containerColor;
+            String deviceLabel;
+
+            if (maxWidth < 600) {
+              // Mobile Layout
+              containerWidth = 200;
+              containerColor = Colors.blue;
+              deviceLabel = "Mobile";
+            } else if (maxWidth < 1000) {
+              // Tablet Layout
+              containerWidth = 400;
+              containerColor = Colors.orange;
+              deviceLabel = "Tablet";
+            } else {
+              // Desktop Layout
+              containerWidth = 600;
+              containerColor = Colors.green;
+              deviceLabel = "Desktop";
+            }
+            return Container(
+              width: containerWidth,
+              height: 200,
+              color: containerColor,
+              child: Center(
+                child: Text(
+                  deviceLabel,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
