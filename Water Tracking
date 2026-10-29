@@ -1,0 +1,207 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const WaterApp());
+}
+
+class WaterApp extends StatelessWidget {
+  const WaterApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorSchemeSeed: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const WaterTracker(),
+    );
+  }
+}
+
+class WaterTracker extends StatefulWidget {
+  const WaterTracker({super.key});
+
+  @override
+  State<WaterTracker> createState() => _WaterTrackerState();
+}
+
+class _WaterTrackerState extends State<WaterTracker> {
+  int consumed = 0;
+  final int goal = 2000;
+
+  void addWater(int amount) {
+    setState(() {
+      consumed += amount;
+    });
+  }
+
+  void resetWater() {
+    setState(() {
+      consumed = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double progress = (consumed / goal).clamp(0.0, 1.0);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Water Tracker 💧'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: resetWater,
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reset',
+          ),
+        ],
+      ),
+
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.water_drop,
+                      size: 80,
+                      color: Colors.blue,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    const Text(
+                      'Daily Water Intake',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          children: [
+                            Text(
+                              '$consumed ml',
+                              style: const TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+
+                            const Text('Water Consumed Today'),
+
+                            const SizedBox(height: 20),
+
+                            LinearProgressIndicator(
+                              value: progress,
+                              minHeight: 12,
+                              borderRadius: BorderRadius.circular(10),
+                              backgroundColor: Colors.blue.shade100,
+                              color: Colors.blue,
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            Text(
+                              '${(progress * 100).round()}% of daily goal',
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            Text(
+                              consumed >= goal
+                                  ? 'Daily goal reached!'
+                                  : '${goal - consumed} ml remaining',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    const Text(
+                      'Add Water',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        waterButton(150),
+                        waterButton(250),
+                        waterButton(500),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    Card(
+                      color: Colors.blue.shade50,
+                      child: const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lightbulb_outline,
+                              color: Colors.blue,
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'Track your water intake throughout the day!',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget waterButton(int amount) {
+    return ElevatedButton.icon(
+      onPressed: () => addWater(amount),
+      icon: const Icon(Icons.add),
+      label: Text('$amount ml'),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+      ),
+    );
+  }
+}
