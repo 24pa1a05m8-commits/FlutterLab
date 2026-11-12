@@ -1,0 +1,177 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Layout Demo',
+      home: const LayoutDemo(),
+    );
+  }
+}
+
+class LayoutDemo extends StatelessWidget {
+  const LayoutDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Row, Column and Stack'),
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // -------------------------
+            // COLUMN WIDGET
+            // -------------------------
+            const Text(
+              'Column Layout',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              color: Colors.blue.shade100,
+              child: const Column(
+                children: [
+                  Text(
+                    'Item 1',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    'Item 2',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    'Item 3',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // -------------------------
+            // ROW WIDGET
+            // -------------------------
+            const Text(
+              'Row Layout',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              color: Colors.green.shade100,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.home,
+                    size: 40,
+                    color: Colors.green,
+                  ),
+                  Icon(
+                    Icons.person,
+                    size: 40,
+                    color: Colors.green,
+                  ),
+                  Icon(
+                    Icons.settings,
+                    size: 40,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // -------------------------
+            // STACK WIDGET
+            // -------------------------
+            const Text(
+              'Stack Layout',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            SizedBox(
+              height: 220,
+              width: double.infinity,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Background
+                  Container(
+                    width: 300,
+                    height: 200,
+                    color: Colors.orange,
+                  ),
+
+                  // Middle box
+                  Container(
+                    width: 220,
+                    height: 140,
+                    color: Colors.blue,
+                  ),
+
+                  // Text on top
+                  const Text(
+                    'Stack Widget',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              'Row arranges widgets horizontally.\n'
+              'Column arranges widgets vertically.\n'
+              'Stack places widgets on top of each other.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

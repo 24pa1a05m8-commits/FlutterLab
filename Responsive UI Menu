@@ -1,0 +1,306 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Responsive UI',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+// ==================== HOME PAGE ====================
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  void navigateToPage(BuildContext context, String page) {
+    if (page == "Home") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+    } else if (page == "Services") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ServicesPage(),
+        ),
+      );
+    } else if (page == "Feedback") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FeedbackPage(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Responsive UI"),
+
+        // Responsive Menu
+        actions: width < 600
+            ? [
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (value) {
+                    navigateToPage(context, value);
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      const PopupMenuItem(
+                        value: "Home",
+                        child: Text("Home"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Services",
+                        child: Text("Services"),
+                      ),
+                      const PopupMenuItem(
+                        value: "Feedback",
+                        child: Text("Feedback"),
+                      ),
+                    ];
+                  },
+                ),
+              ]
+            : [
+                // Home Button
+                TextButton(
+                  onPressed: () {
+                    navigateToPage(context, "Home");
+                  },
+                  child: const Text(
+                    "Home",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+
+                // Services Button
+                TextButton(
+                  onPressed: () {
+                    navigateToPage(context, "Services");
+                  },
+                  child: const Text(
+                    "Services",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+
+                // Feedback Button
+                TextButton(
+                  onPressed: () {
+                    navigateToPage(context, "Feedback");
+                  },
+                  child: const Text(
+                    "Feedback",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+      ),
+
+      // ==================== HOME BODY ====================
+
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/wallpaper.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: const Text(
+            "Welcome to Home Page",
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ==================== SERVICES PAGE ====================
+
+class ServicesPage extends StatelessWidget {
+  const ServicesPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Services"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 40),
+            const Icon(
+              Icons.miscellaneous_services,
+              size: 80,
+              color: Colors.blue,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Our Services",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "We provide high-quality services to meet "
+              "your needs. Our services include customer "
+              "support, technical assistance, and consulting.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ==================== FEEDBACK PAGE ====================
+
+class FeedbackPage extends StatefulWidget {
+  const FeedbackPage({Key? key}) : super(key: key);
+
+  @override
+  State<FeedbackPage> createState() => _FeedbackPageState();
+}
+
+class _FeedbackPageState extends State<FeedbackPage> {
+  // Controller used to read the feedback entered by the user
+  final TextEditingController feedbackController = TextEditingController();
+
+  // Message displayed after submitting
+  String message = "";
+
+  // Submit feedback
+  void submitFeedback() {
+    String feedback = feedbackController.text;
+
+    // Read the entered feedback
+    print("Feedback: $feedback");
+
+    setState(() {
+      message = "Feedback Submitted";
+    });
+  }
+
+  @override
+  void dispose() {
+    feedbackController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Feedback"),
+      ),
+
+      // SafeArea prevents content from going underneath
+      // system UI areas.
+      body: SafeArea(
+        // FIX FOR OVERFLOW
+        // The page can now scroll on smaller screens.
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+
+              // Feedback heading
+              const Text(
+                "Enter your feedback",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Feedback TextField
+              TextField(
+                controller: feedbackController,
+
+                // Reduced from 5 to 4 to fit smaller screens better
+                maxLines: 4,
+
+                decoration: const InputDecoration(
+                  hintText: "Write your feedback here...",
+                  border: OutlineInputBorder(),
+
+                  // Optional label
+                  labelText: "Feedback",
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Submit Button
+              ElevatedButton(
+                onPressed: submitFeedback,
+                child: const Text(
+                  "Submit",
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Display message after submission
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
